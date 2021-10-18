@@ -1,0 +1,9 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  web:
+    build: .
+    image: mbround18/redirect:latest
+    environment:
+      - 'REDIRECTS="google>https://google.com|discord>https://discord.gg/d5N7JwzPgt"'
+    ports:
+      - "8000:8000"
