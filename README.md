@@ -39,3 +39,11 @@ services:
     ports:
       - "8000:8000"
 ```
+
+## Statistics
+
+With about 20 routes preloaded in the environment variable, the web services consumes about 3-4 MB
+![image](https://user-images.githubusercontent.com/12646562/137840366-feff4c69-7f01-4903-abbd-4c014ff4a9d1.png)
+
+Additionally, it does not even register on the cpu scale which is in millicores (the metrics tool is lens :P all other apps work register on the cluster ;) ) 
+![image](https://user-images.githubusercontent.com/12646562/137840435-e17cdd65-b0fc-48fd-95c0-3e705d6b2ecf.png)
