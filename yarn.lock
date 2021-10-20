@@ -62,7 +62,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auto-it/git-tag@npm:^10.32.1":
+"@auto-it/git-tag@npm:10.32.1":
   version: 10.32.1
   resolution: "@auto-it/git-tag@npm:10.32.1"
   dependencies:
@@ -458,7 +458,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"auto@npm:^10.32.1":
+"auto@npm:10.32.1":
   version: 10.32.1
   resolution: "auto@npm:10.32.1"
   dependencies:
@@ -1551,8 +1551,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "redirect@workspace:."
   dependencies:
-    "@auto-it/git-tag": ^10.32.1
-    auto: ^10.32.1
+    "@auto-it/git-tag": 10.32.1
+    auto: 10.32.1
   languageName: unknown
   linkType: soft
 
