@@ -23,7 +23,7 @@ FROM mbround18/cargo-make:latest as cargo-make
 # ----------------- #
 # ---- Builder ---- #
 # ----------------- #
-FROM rust:1.56 as builder
+FROM rust:1.57 as builder
 WORKDIR /app/redirect
 COPY . .
 # Copy over the cached dependencies
