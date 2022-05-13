@@ -8,5 +8,5 @@
     "@auto-it/git-tag": "10.36.5",
     "auto": "10.36.5"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.1"
 }
