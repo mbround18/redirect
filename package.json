@@ -6,7 +6,7 @@
   "license": "MIT",
   "devDependencies": {
     "@auto-it/git-tag": "10.37.0",
-    "auto": "10.36.5"
+    "auto": "10.37.0"
   },
   "packageManager": "yarn@3.2.1"
 }
