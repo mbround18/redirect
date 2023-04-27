@@ -1,7 +1,8 @@
+ARG RUST_VERSION=1.69
 # ----------------- #
 # ---- Planner ---- #
 # ----------------- #
-FROM lukemathwalker/cargo-chef:latest-rust-1.55-alpine as planner
+FROM lukemathwalker/cargo-chef:latest-rust-${RUST_VERSION}-alpine as planner
 WORKDIR /app/redirect
 COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
@@ -9,7 +10,7 @@ RUN cargo chef prepare --recipe-path recipe.json
 # ----------------- #
 # ---- Cacher  ---- #
 # ----------------- #
-FROM lukemathwalker/cargo-chef:latest-rust-1.55-alpine as cacher
+FROM lukemathwalker/cargo-chef:latest-rust-${RUST_VERSION}-alpine as cacher
 WORKDIR /app/redirect
 COPY --from=planner /app/redirect/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
@@ -23,7 +24,7 @@ FROM mbround18/cargo-make:latest as cargo-make
 # ----------------- #
 # ---- Builder ---- #
 # ----------------- #
-FROM rust:1.69 as builder
+FROM rust:${RUST_VERSION} as builder
 WORKDIR /app/redirect
 COPY . .
 # Copy over the cached dependencies
