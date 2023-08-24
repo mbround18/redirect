@@ -1,4 +1,4 @@
-ARG RUST_VERSION=1.71
+ARG RUST_VERSION=1.72
 # ----------------- #
 # ---- Planner ---- #
 # ----------------- #
