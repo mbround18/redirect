@@ -5,7 +5,7 @@ always = true # default: false
 require_automerge_label = false # default: true
 
 [approve]
-auto_approve_usernames = ["dependabot", "renovate"]
+auto_approve_usernames = ["dependabot", "renovate", "mbround18"]
 
 [merge.automerge_dependencies]
 usernames = ["dependabot", "renovate"]
