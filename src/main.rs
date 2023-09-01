@@ -6,11 +6,15 @@ use regex::Regex;
 use rocket::response::Redirect;
 use std::env;
 
-const BASE_ENDPOINT: &str = "https://github.com/mbround18/";
+const BASE_ENDPOINT: &str = "https://github.com/mbround18/redirect";
 
+/// This is our base http endpoint
+/// This calls a redirect to the base endpoint of mbround18's github.
 #[get("/")]
 fn base() -> Redirect {
-    Redirect::to(BASE_ENDPOINT)
+    env::var("DEFAULT_ENDPOINT")
+        .map(|endpoint| Redirect::to(endpoint))
+        .unwrap_or_else(|_| Redirect::to(BASE_ENDPOINT))
 }
 
 #[get("/<target>")]
