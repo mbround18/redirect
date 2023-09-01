@@ -1,11 +1,11 @@
 [package]
 name = "redirect"
-version = "0.1.0"
-edition = "2018"
+version = "0.2.0"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rocket = "0.5.0-rc.3"
-dotenv = "0.15.0"
+rocket = "0.5.0-rc"
+dotenv = "0.15"
 regex = "1"
