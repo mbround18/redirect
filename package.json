@@ -5,7 +5,7 @@
   "author": "mbround18 <12646562+mbround18@users.noreply.github.com>",
   "license": "MIT",
   "devDependencies": {
-    "@auto-it/git-tag": "11.0.1",
+    "@auto-it/git-tag": "11.1.1",
     "auto": "11.0.1"
   },
   "packageManager": "yarn@4.0.2"
