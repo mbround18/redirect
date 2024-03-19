@@ -13,7 +13,7 @@ const BASE_ENDPOINT: &str = "https://github.com/mbround18/redirect";
 #[get("/")]
 fn base() -> Redirect {
     env::var("DEFAULT_ENDPOINT")
-        .map(|endpoint| Redirect::to(endpoint))
+        .map(Redirect::to)
         .unwrap_or_else(|_| Redirect::to(BASE_ENDPOINT))
 }
 
