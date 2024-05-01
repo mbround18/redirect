@@ -8,4 +8,4 @@ edition = "2021"
 [dependencies]
 rocket = "0.5"
 dotenv = "0.15"
-regex = "1"
+regex = "1.10.4"
