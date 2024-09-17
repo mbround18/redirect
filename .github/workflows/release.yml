@@ -5,9 +5,11 @@ on:
     branches:
       - main
   push:
+    tags:
+      - '*'
     branches:
       - main
-
+  
 jobs:
   docker_release:
     name: Call Docker Release Workflow
