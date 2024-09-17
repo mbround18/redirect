@@ -1,42 +1,47 @@
+# Specify the Rust version
 ARG RUST_VERSION=1.81
+FROM rust:${RUST_VERSION} AS base
+
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/home/root/app/target \
+    cargo install cargo-chef
+
 # ----------------- #
 # ---- Planner ---- #
 # ----------------- #
-FROM lukemathwalker/cargo-chef:latest-rust-${RUST_VERSION}-alpine as planner
-WORKDIR /app/redirect
-COPY . .
+FROM base AS planner
+WORKDIR /app
+
+COPY Cargo.toml Cargo.lock ./
+COPY src/ src/
+
 RUN cargo chef prepare --recipe-path recipe.json
-
-# ----------------- #
-# ---- Cacher  ---- #
-# ----------------- #
-FROM lukemathwalker/cargo-chef:latest-rust-${RUST_VERSION}-alpine as cacher
-WORKDIR /app/redirect
-COPY --from=planner /app/redirect/recipe.json recipe.json
-RUN cargo chef cook --release --recipe-path recipe.json
-
-# --------------------------- #
-# ---- Project Mangement ---- #
-# --------------------------- #
-
-FROM mbround18/cargo-make:latest as cargo-make
 
 # ----------------- #
 # ---- Builder ---- #
 # ----------------- #
-FROM rust:${RUST_VERSION} as builder
-WORKDIR /app/redirect
+FROM base AS builder
+WORKDIR /app
+
+COPY --from=planner /app/recipe.json recipe.json
+
+RUN cargo chef cook --release --recipe-path recipe.json
+
 COPY . .
-# Copy over the cached dependencies
-COPY --from=cacher /app/redirect/target target
-COPY --from=cacher /usr/local/cargo/registry /usr/local/cargo/
-COPY --from=cargo-make /usr/local/bin/cargo-make /usr/local/cargo/bin
-RUN /usr/local/cargo/bin/cargo build --release
+
+RUN cargo build --profile release
 
 # ----------------- #
 # ---- Runtime ---- #
 # ----------------- #
-FROM debian:buster-slim as runtime
-WORKDIR /app/redirect
-COPY --from=builder /app/redirect/target/release/redirect /usr/local/bin/
+FROM debian:bookworm AS runtime
+WORKDIR /app
+
+COPY --from=builder /app/target/release/redirect /usr/local/bin/
+
+RUN useradd -m appuser && chown appuser /usr/local/bin/redirect
+USER appuser
+
+EXPOSE 8080
+
 ENTRYPOINT ["/usr/local/bin/redirect"]
