@@ -1,12 +1,19 @@
-jobs:
-  release:
-    runs-on: ubuntu-lates
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          # Ensure that git uses your token with admin access to the repo
-          token: ${{ secrets.ADMIN_TOKEN }}
+name: "Docker Release Workflow"
 
-      - name: Prepare repository
-        # Fetch full git history and tags
-        run: git fetch --unshallow --tags
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  docker_release:
+    name: Call Docker Release Workflow
+    uses: mbround18/gh-reusable/.github/workflows/docker-release.yaml@main
+    with:
+      image: "mbround18/redirect" # Specify the test image name here
+      dockerfile: "./Dockerfile" # Path to the seeded Dockerfile
+    secrets:
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}

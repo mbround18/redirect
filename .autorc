@@ -1,9 +1,0 @@
-{
-  "plugins": [
-    "git-tag"
-  ],
-  "owner": "mbround18",
-  "repo": "redirect",
-  "name": "Michael Bruno",
-  "email": "no-reply@boop.ninja"
-}
