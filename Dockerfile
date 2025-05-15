@@ -1,5 +1,5 @@
 # Specify the Rust version
-ARG RUST_VERSION=1.86
+ARG RUST_VERSION=1.87
 FROM rust:${RUST_VERSION} AS base
 
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
