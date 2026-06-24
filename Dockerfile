@@ -34,7 +34,7 @@ RUN cargo build --profile release
 # ----------------- #
 # ---- Runtime ---- #
 # ----------------- #
-FROM debian:bookworm AS runtime
+FROM debian:bookworm-20260623 AS runtime
 WORKDIR /app
 
 COPY --from=builder /app/target/release/redirect /usr/local/bin/
