@@ -1,4 +1,4 @@
-name: "Docker Release Workflow"
+name: Docker Release
 
 on:
   pull_request:
@@ -6,16 +6,73 @@ on:
       - main
   push:
     tags:
-      - '*'
+      - "*"
     branches:
       - main
-  
+
 jobs:
-  docker_release:
-    name: Call Docker Release Workflow
-    uses: mbround18/gh-reusable/.github/workflows/docker-release.yaml@main
-    with:
-      image: "mbround18/redirect" # Specify the test image name here
-      dockerfile: "./Dockerfile" # Path to the seeded Dockerfile
-    secrets:
-      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: mbround18/paws/actions/paws-up@main
+
+      - name: Resolve release version
+        id: resolve
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            version="${{ github.ref_name }}"
+          else
+            version=$(paws semver --branch main)
+          fi
+          echo "Resolved version: $version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  docker-release:
+    needs: version
+    name: paws docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: mbround18/paws/actions/paws-up@main
+
+      - name: paws docker
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+        run: |
+          paws docker \
+            --image "mbround18/redirect" \
+            --version "${{ needs.version.outputs.version }}" \
+            --registries ghcr.io \
+            --dockerhub-username mbround18 \
+            --ghcr-username mbround18
+
+  tagger:
+    needs: [version, docker-release]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: mbround18/paws/actions/paws-up@main
+
+      - name: Compute and push next tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: paws semver --branch main --push
